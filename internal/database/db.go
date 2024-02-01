@@ -9,16 +9,24 @@ var (
 	DB *os.File
 )
 
-const dbPath = ".cypher.json"
+func DBPath() (string, error) {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return homeDir, err
+	}
+
+	dir := homeDir + "/" + ".cypher.json"
+
+	return dir, nil
+}
 
 func InitDB() *os.File {
-	homeDir, err := os.UserHomeDir()
-	dir := homeDir + "/" + dbPath
-
-	var file *os.File
+	dir, err := DBPath()
 	if err != nil {
 		panic(err)
 	}
+
+	var file *os.File
 
 	if _, err := os.Stat(dir); err != nil {
 		// 自动创建文件并写入空内容

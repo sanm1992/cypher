@@ -154,12 +154,13 @@ func (c CredentialService) GetCredentialByDomain(domain string) models.Credentia
 }
 
 func writeFile(content []byte) error {
-	dir, err := os.UserHomeDir()
-	var file *os.File
+	dir, err := database.DBPath()
 	if err != nil {
-		panic(err)
+		return err
 	}
-	file, err = os.OpenFile(dir+"/cypher.json", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+
+	var file *os.File
+	file, err = os.OpenFile(dir, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
